@@ -51,6 +51,7 @@
     <Compile Include="Events\EmployeeRegisteredEvent.cs" />
     <Compile Include="Events\EmployeeHomeAddressUpdatedEvent.cs" />
     <Compile Include="Events\EmployeeSalaryRaisedEvent.cs" />
+    <Compile Include="Events\FailedToRegisterEmployeeEvent.cs" />
     <Compile Include="Model\Address.cs" />
     <Compile Include="Model\BrazilianAddress.cs" />
     <Compile Include="Model\Employee.cs" />

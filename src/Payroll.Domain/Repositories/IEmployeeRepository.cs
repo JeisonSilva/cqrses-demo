@@ -4,7 +4,9 @@ namespace Payroll.Domain.Repositories
 {
     public interface IEmployeeRepository
     {
+        bool IsRegistered(EmployeeId id);
         Employee Load(EmployeeId id);
+
         void CreateEmployee(
             EmployeeId id,
             FullName name,

@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
 using Payroll.Domain;
 using Payroll.Domain.Model;
 using Payroll.Domain.Repositories;
@@ -8,7 +8,13 @@ namespace Playground
 {
     class InMemoryEmployeeRepository : IEmployeeRepository
     {
-        IDictionary<EmployeeId, Employee> _data = new Dictionary<EmployeeId, Employee>();
+        readonly IDictionary<EmployeeId, Employee> _data = 
+            new Dictionary<EmployeeId, Employee>();
+
+        public bool IsRegistered(EmployeeId id)
+        {
+            return (_data.ContainsKey(id));
+        }
 
         public Employee Load(EmployeeId id)
         {

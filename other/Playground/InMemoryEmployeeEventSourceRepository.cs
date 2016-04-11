@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Payroll.Domain;
 using Payroll.Domain.Events;
 using Payroll.Domain.Model;
@@ -19,6 +17,11 @@ namespace Playground
     {
         
         readonly IList<EmployeeEvent> _events = new List<EmployeeEvent>();
+
+        public bool IsRegistered(EmployeeId id)
+        {
+            return _events.Any(e => e.Id.Equals(id));
+        }
 
         public Employee Load(EmployeeId id)
         {
@@ -51,7 +54,7 @@ namespace Playground
                 }
             }
 
-            Console.WriteLine($"Done!");
+            Console.WriteLine("Done!");
             Console.WriteLine("");
 
             return result;

@@ -19,15 +19,22 @@ namespace Payroll.Domain.CommandHandlers
 
         public void Handle(RegisterEmployeeCommand message)
         {
-            _repository.CreateEmployee(message.Id, message.Name, message.InitialSalary);
-             
-            _bus.RaiseEvent(
-                new EmployeeRegisteredEvent(
-                    message.Id,
-                    message.Name,
-                    message.InitialSalary
-                    )
-                );
+            if (!_repository.IsRegistered(message.Id))
+            {
+                _repository.CreateEmployee(message.Id, message.Name, message.InitialSalary);
+
+                _bus.RaiseEvent(
+                    new EmployeeRegisteredEvent(
+                        message.Id,
+                        message.Name,
+                        message.InitialSalary
+                        )
+                    );
+            }
+            else
+            {
+                 _bus.RaiseEvent(new FailedToRegisterEmployeeEvent(message.Id));
+            }
         }
     }
 }

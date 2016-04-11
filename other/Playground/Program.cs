@@ -1,11 +1,14 @@
 ﻿using System;
+
 using Payroll.Domain;
 using Payroll.Domain.CommandHandlers;
 using Payroll.Domain.Commands;
+using Payroll.Domain.Events;
 using Payroll.Domain.Model;
 using Payroll.Domain.Repositories;
 using Payroll.Infrastructure;
 using Payroll.Infrastructure.InMemoryBus;
+
 
 namespace Playground
 {
@@ -19,7 +22,8 @@ namespace Playground
             SetupDomainCommandHandlers(container);
 
             //SetupInMemoryRepo(container);
-            SetupInMemoryESRepo(container);
+            //SetupInMemoryESRepo(container);
+            SetupRavenDbRegularRepo(container);
 
             ExecuteSampleCommands(container);
             
@@ -39,9 +43,13 @@ namespace Playground
         private static void SetupDomainCommandHandlers(IDependencyInjector container)
         {
             var bus = container.Get<IBus>();
+
             bus.RegisterHandler<RegisterEmployeeHandler>();
             bus.RegisterHandler<RaiseEmployeeSalaryHandler>();
             bus.RegisterHandler<UpdateEmployeeHomeAddressHandler>();
+
+            bus.RegisterHandler<FailedToRegisterEmployeeHandler>();
+
         }
 
         private static void SetupInMemoryRepo(SimpleDependencyInjector container)
@@ -58,6 +66,13 @@ namespace Playground
             container.BindToConstant<IEmployeeRepository>(esrepo);
             container.BindToConstant(esrepo);
             container.Get<IBus>().RegisterHandler<InMemoryEmployeeEventSourceRepository>();
+        }
+
+        private static void SetupRavenDbRegularRepo(SimpleDependencyInjector container)
+        {
+            container.BindToConstant<IEmployeeRepository>(
+                new Payroll.Infrastructure.RavenDbEmployeeRepository.EmployeeRepository()
+                );
         }
 
         private static void ExecuteSampleCommands(IDependencyInjector container)
@@ -81,7 +96,9 @@ namespace Playground
                 BrazilianAddress.Factory.New("Nice street", 42, null, "Good Ville", "MyCity", "XX", "91234-123"))
                     );
 
-            bus.SendCommand(new RaiseEmployeeSalaryCommand("12345", 10m));
+            bus.SendCommand(new RaiseEmployeeSalaryCommand(
+                id: "12345",  
+                amount: 10m));
             bus.SendCommand(new RaiseEmployeeSalaryCommand("12345", 20m));
             bus.SendCommand(new RaiseEmployeeSalaryCommand("12345", 13m));
 
@@ -92,6 +109,18 @@ namespace Playground
 
             bus.SendCommand(new RaiseEmployeeSalaryCommand("12345", 21m));
             bus.SendCommand(new RaiseEmployeeSalaryCommand("12345", 14m));
+        }
+    }
+
+    public class FailedToRegisterEmployeeHandler :
+        IMessageHandler<FailedToRegisterEmployeeEvent>
+    {
+        public void Handle(FailedToRegisterEmployeeEvent message)
+        {
+            var oldColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"ERROR: Failed to register employee {message.Id}");
+            Console.ForegroundColor = oldColor;
         }
     }
 }

@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Payroll.Domain.Events;
 using Payroll.Domain.Model;
+using Raven.Abstractions.Indexing;
 using Raven.Client.Document;
+using Raven.Client.Indexes;
 using Raven.Imports.Newtonsoft.Json;
 
 namespace Payroll.Infrastructure.RavenDbEmployeeRepository
@@ -29,7 +33,15 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
 
             _store.Initialize();
             _store.Conventions.FindTypeTagName = t => "EmployeeEvents";
+
+            InitializeIndexes();
         }
+
+        private void InitializeIndexes()
+        {
+            new EventStoreSummaryIndex().Execute(_store);
+        }
+
 
         public void HandleInternal(Message message)
         {
@@ -41,35 +53,87 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
         }
 
         public void Handle(EmployeeRegisteredEvent message)
-        { HandleInternal(message); }
+        {
+            HandleInternal(message);
+        }
 
         public void Handle(EmployeeHomeAddressUpdatedEvent message)
-        { HandleInternal(message); }
+        {
+            HandleInternal(message);
+        }
 
         public void Handle(EmployeeSalaryRaisedEvent message)
-        { HandleInternal(message); }
+        {
+            HandleInternal(message);
+        }
 
         public void Dispose()
         {
             _store.Dispose();
         }
-    }
 
-    public class EmployeeIdJsonConverter : JsonConverter
-    {
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public class EmployeeIdJsonConverter : JsonConverter
         {
-            serializer.Serialize(writer, $"employees/{value}");
+            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            {
+                serializer.Serialize(writer, $"employees/{value}");
+            }
+
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+            {
+                var original = (string)reader.Value;
+                return (EmployeeId) original.Substring(
+                    original.IndexOf("/", StringComparison.Ordinal) + 1);
+            }
+
+            public override bool CanConvert(Type objectType)
+            {
+                return objectType == typeof(EmployeeId);
+            }
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public IEnumerable<EventStoreSummaryResult> Summary()
         {
-            throw new NotImplementedException();
+            IEnumerable<EventStoreSummaryResult> results;
+
+            using (var session = _store.OpenSession())
+            {
+                results = session
+                    .Advanced
+                    .DocumentQuery<EventStoreSummaryResult, EventStoreSummaryIndex>()
+                    .ToList();
+            }
+
+            return results;
         }
 
-        public override bool CanConvert(Type objectType)
+        public class EventStoreSummaryResult
         {
-            return objectType == typeof (EmployeeId);
+            public EmployeeId EmployeeId { get; set; }
+            public int NumberOfEvents { get; set; }
+        }
+
+        class EventStoreSummaryIndex : AbstractIndexCreationTask
+        {
+            
+            public override string IndexName => "EmployeeEvents/Summary";
+
+            public override IndexDefinition CreateIndexDefinition()
+            {
+                return new IndexDefinition
+                {
+                    Map = @"
+from doc in docs.EmployeeEvents
+select new {
+	EmployeeId = doc.EmployeeId,
+	NumberOfEvents=1
+}",
+                    Reduce = @" 
+from result in results
+group result by result.EmployeeId into g
+select new {EmployeeId=g.Key, NumberOfEvents = g.Sum(x => x.NumberOfEvents)}"
+                };
+            }
         }
     }
 }

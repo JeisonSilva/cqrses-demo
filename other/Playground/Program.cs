@@ -33,6 +33,12 @@ namespace Playground
 
             var employee2 = container.Get<IEmployeeRepository>().Load("54321");
             Console.WriteLine($"Employee {employee2.Id} - {employee2.Name} salary is ${employee2.Salary}");
+
+            var es = container.Get<EmployeeEventStore>();
+            foreach (var entry in es.Summary())
+            {
+                Console.WriteLine($"Number of events to {entry.EmployeeId} is {entry.NumberOfEvents}");
+            }
         }
 
         private static void SetupBus(SimpleDependencyInjector container)
@@ -74,7 +80,7 @@ namespace Playground
             container.BindToConstant<IEmployeeRepository>(
                 new Payroll.Infrastructure.RavenDbEmployeeRepository.EmployeeRepository()
                 );
-
+            
             container.BindToConstant(new EmployeeEventStore());
             container.Get<IBus>().RegisterHandler<EmployeeEventStore>();
         }

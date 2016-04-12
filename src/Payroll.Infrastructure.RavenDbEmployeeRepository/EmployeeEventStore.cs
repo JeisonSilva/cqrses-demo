@@ -39,7 +39,8 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
 
         private void InitializeIndexes()
         {
-            new EventStoreSummaryIndex().Execute(_store);
+            new EmployeeEventsSummaryIndex().Execute(_store);
+            new EmployeeEventsSalaryPerEmployee().Execute(_store);
         }
 
 
@@ -79,43 +80,62 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
                 serializer.Serialize(writer, $"employees/{value}");
             }
 
-            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+                JsonSerializer serializer)
             {
-                var original = (string)reader.Value;
+                var original = (string) reader.Value;
                 return (EmployeeId) original.Substring(
                     original.IndexOf("/", StringComparison.Ordinal) + 1);
             }
 
             public override bool CanConvert(Type objectType)
             {
-                return objectType == typeof(EmployeeId);
+                return objectType == typeof (EmployeeId);
             }
         }
 
-        public IEnumerable<EventStoreSummaryResult> Summary()
+        public IEnumerable<EmployeeEventsSummaryResult> Summary()
         {
-            IEnumerable<EventStoreSummaryResult> results;
+            IEnumerable<EmployeeEventsSummaryResult> results;
 
             using (var session = _store.OpenSession())
             {
                 results = session
                     .Advanced
-                    .DocumentQuery<EventStoreSummaryResult, EventStoreSummaryIndex>()
+                    .DocumentQuery<EmployeeEventsSummaryResult, EmployeeEventsSummaryIndex>()
                     .ToList();
             }
 
             return results;
         }
 
-        public class EventStoreSummaryResult
+
+        public IEnumerable<EmployeeSalary> TopSalaries()
+        {
+            IEnumerable<EmployeeSalary> results;
+
+            using (var session = _store.OpenSession())
+            {
+                results = session
+                    .Advanced
+                    .DocumentQuery<EmployeeSalary, EmployeeEventsSalaryPerEmployee>()
+                    .OrderByDescending(es => es.Salary)
+                    .ToList();
+            }
+
+            return results;
+        }
+
+        public class EmployeeEventsSummaryResult
         {
             public EmployeeId EmployeeId { get; set; }
             public int NumberOfEvents { get; set; }
         }
 
-        class EventStoreSummaryIndex : AbstractIndexCreationTask
+
+        class EmployeeEventsSummaryIndex : AbstractIndexCreationTask
         {
-            
+
             public override string IndexName => "EmployeeEvents/Summary";
 
             public override IndexDefinition CreateIndexDefinition()
@@ -134,6 +154,50 @@ group result by result.EmployeeId into g
 select new {EmployeeId=g.Key, NumberOfEvents = g.Sum(x => x.NumberOfEvents)}"
                 };
             }
+        }
+
+        public class EmployeeSalary
+        {
+            public EmployeeId EmployeeId { get; set; }
+            public string FullName { get; set; }
+            public decimal Salary { get; set; }
+        }
+
+        public class EmployeeEventsSalaryPerEmployee : AbstractIndexCreationTask
+        {
+            public override string IndexName => "EmployeeEvents/SalaryPerEmployee";
+
+            public override IndexDefinition CreateIndexDefinition()
+            {
+                return new IndexDefinition
+                {
+                    Maps =
+                    {
+                        @"from doc in docs.EmployeeEvents
+where doc.MessageType == ""EmployeeSalaryRaisedEvent""
+select new {
+	doc.EmployeeId,
+	FullName = """",
+	Salary = doc.Amount,
+}",
+                        @"from doc in docs.EmployeeEvents
+where doc.MessageType == ""EmployeeRegisteredEvent""
+select new {
+	doc.EmployeeId,
+	FullName = doc.Name.GivenName + "" "" + doc.Name.Surname,
+	Salary = doc.InitialSalary,
+}"
+                    },
+                    Reduce = @"from result in results
+group result by result.EmployeeId into g
+select new {
+	EmployeeId = g.Key,
+	FullName = g.Aggregate("""", (prev, entry) => entry.FullName != """" ? entry.FullName : prev),
+	Salary = g.Sum(x => x.Salary)
+}"
+                };
+            }
+
         }
     }
 }

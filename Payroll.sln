@@ -7,8 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{16D334AE-B76
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{FE417644-A51C-4B86-A3EC-242263D08E91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payroll.Domain.Tests", "test\Payroll.Domain.Tests\Payroll.Domain.Tests.csproj", "{439CDA9A-8478-4FEA-926C-3AF70EB3935C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payroll.Domain", "src\Payroll.Domain\Payroll.Domain.csproj", "{3E052262-9B4F-4881-AAD8-47F0437C9FF9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payroll.Infrastructure", "src\Payroll.Infrastructure\Payroll.Infrastructure.csproj", "{E21D42E2-AEDE-4234-B8F1-1B7E84D48C35}"
@@ -27,10 +25,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{439CDA9A-8478-4FEA-926C-3AF70EB3935C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{439CDA9A-8478-4FEA-926C-3AF70EB3935C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{439CDA9A-8478-4FEA-926C-3AF70EB3935C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{439CDA9A-8478-4FEA-926C-3AF70EB3935C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3E052262-9B4F-4881-AAD8-47F0437C9FF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3E052262-9B4F-4881-AAD8-47F0437C9FF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E052262-9B4F-4881-AAD8-47F0437C9FF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -56,7 +50,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{439CDA9A-8478-4FEA-926C-3AF70EB3935C} = {FE417644-A51C-4B86-A3EC-242263D08E91}
 		{3E052262-9B4F-4881-AAD8-47F0437C9FF9} = {16D334AE-B767-44AE-A582-E578A65BC2CA}
 		{E21D42E2-AEDE-4234-B8F1-1B7E84D48C35} = {16D334AE-B767-44AE-A582-E578A65BC2CA}
 		{71C4419C-29AD-48A3-92FF-F4E1695D2096} = {16D334AE-B767-44AE-A582-E578A65BC2CA}

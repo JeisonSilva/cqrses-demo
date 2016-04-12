@@ -39,6 +39,11 @@ namespace Playground
             {
                 Console.WriteLine($"Number of events to {entry.EmployeeId} is {entry.NumberOfEvents}");
             }
+
+            foreach (var entry in es.TopSalaries())
+            {
+                Console.WriteLine($"{entry.EmployeeId} -  {entry.FullName} (${entry.Salary})");
+            }
         }
 
         private static void SetupBus(SimpleDependencyInjector container)

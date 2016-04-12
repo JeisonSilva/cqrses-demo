@@ -56,9 +56,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Payroll.Domain\Payroll.Domain.csproj">
       <Project>{3e052262-9b4f-4881-aad8-47f0437c9ff9}</Project>
       <Name>Payroll.Domain</Name>
@@ -67,6 +64,9 @@
       <Project>{e21d42e2-aede-4234-b8f1-1b7e84d48c35}</Project>
       <Name>Payroll.Infrastructure</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

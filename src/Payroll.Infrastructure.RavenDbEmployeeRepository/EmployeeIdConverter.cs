@@ -13,12 +13,14 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
 
         public string ConvertFrom(string tag, object value, bool allowNull)
         {
-            return ((EmployeeId) value);
+            return $"{tag}{value}";
         }
 
         public object ConvertTo(string value)
         {
-            return (EmployeeId) value;
+            return value.IndexOf("/", StringComparison.Ordinal) != -1
+                ? (EmployeeId) value.Split('/')[1]
+                : (EmployeeId) value;
         }
     }
 }

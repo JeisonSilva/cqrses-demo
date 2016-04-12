@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Dynamic;
 using Payroll.Domain;
 using Payroll.Domain.Model;
 using Payroll.Domain.Repositories;
 using Raven.Abstractions.Data;
+using Raven.Abstractions.Extensions;
 using Raven.Client;
 using Raven.Client.Document;
+using Raven.Imports.Newtonsoft.Json;
 using Raven.Json.Linq;
 
 namespace Payroll.Infrastructure.RavenDbEmployeeRepository
@@ -13,16 +14,20 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
     public class EmployeeRepository : IEmployeeRepository, IDisposable
     {
         private readonly IDocumentStore _store;
+        private JsonSerializer _serializer;
 
         public EmployeeRepository()
         {
             _store = new DocumentStore
             {
-                Url = "http://localhost:8081/", // server URL
+                Url = "http://localhost:8080/", // server URL
                 DefaultDatabase = "RegularDb"
             };
 
             _store.Initialize();
+
+            _serializer = _store.Conventions.CreateSerializer();
+            _serializer.TypeNameHandling = TypeNameHandling.All;
 
             _store.Conventions.IdentityTypeConvertors.Add(
                 new EmployeeIdConverter()
@@ -32,7 +37,8 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
         
         public bool IsRegistered(EmployeeId id)
         {
-            return false;
+            var lid = $"employees/{id}";
+            return _store.DatabaseCommands.Head(lid) != null;
         }
 
         public Employee Load(EmployeeId id)
@@ -40,7 +46,8 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
             Employee result;
             using (var session = _store.OpenSession())
             {
-                result = session.Load<Employee>(id);
+                var lid = $"employees/{id}";
+                result = session.Load<Employee>(lid);
             }
             return result;
         }
@@ -57,16 +64,19 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
 
         public void RaiseSalary(EmployeeId id, decimal amount)
         {
+            _store.DatabaseCommands.Patch($"employees/{id}", new ScriptedPatchRequest
+            {
+                Script = $"this.Salary += {amount.ToInvariantString()};"
+            });
         }
 
         public void UpdateHomeAddress(EmployeeId id, Address homeAddress)
         {
-            var ro = RavenJObject.FromObject(homeAddress);
-            ro.Add("$type", homeAddress.GetType().FullName);
+            var ro = RavenJObject.FromObject(homeAddress, _serializer);
             
-            _store.DatabaseCommands.Patch(id, new[]
+            _store.DatabaseCommands.Patch($"employees/{id}", new[]
             {
-                new PatchRequest()
+                new PatchRequest
                 {
                     Type = PatchCommandType.Set,
                     Name = "HomeAddress",

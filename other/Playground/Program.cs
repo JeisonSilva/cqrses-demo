@@ -24,9 +24,8 @@ namespace Playground
             //SetupInMemoryRepo(container);
             //SetupInMemoryESRepo(container);
             SetupRavenDbRegularRepo(container);
-
             ExecuteSampleCommands(container);
-            
+
             var employee = container.Get<IEmployeeRepository>().Load("12345");
             Console.WriteLine($"Employee {employee.Id} - {employee.Name} salary is ${employee.Salary}");
 

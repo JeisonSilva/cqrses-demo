@@ -94,7 +94,7 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
             }
         }
 
-        public IEnumerable<EmployeeEventsSummaryResult> Summary()
+        public IEnumerable<EmployeeEventsSummaryResult> TopEventSourceEmployees()
         {
             IEnumerable<EmployeeEventsSummaryResult> results;
 
@@ -103,6 +103,7 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
                 results = session
                     .Advanced
                     .DocumentQuery<EmployeeEventsSummaryResult, EmployeeEventsSummaryIndex>()
+                    .OrderByDescending(item => item.NumberOfEvents)
                     .ToList();
             }
 
@@ -133,26 +134,30 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
         }
 
 
-        class EmployeeEventsSummaryIndex : AbstractIndexCreationTask
+        class EmployeeEventsSummaryIndex 
+            : AbstractIndexCreationTask<EmployeeEvent, EmployeeEventsSummaryResult>
         {
 
             public override string IndexName => "EmployeeEvents/Summary";
 
-            public override IndexDefinition CreateIndexDefinition()
+            public EmployeeEventsSummaryIndex()
             {
-                return new IndexDefinition
-                {
-                    Map = @"
-from doc in docs.EmployeeEvents
-select new {
-	EmployeeId = doc.EmployeeId,
-	NumberOfEvents=1
-}",
-                    Reduce = @" 
-from result in results
-group result by result.EmployeeId into g
-select new {EmployeeId=g.Key, NumberOfEvents = g.Sum(x => x.NumberOfEvents)}"
-                };
+                Map = (events) =>
+                    from e in events
+                    select new EmployeeEventsSummaryResult
+                    {
+                        EmployeeId = e.EmployeeId,
+                        NumberOfEvents = 1
+                    };
+
+                Reduce = (inputs) =>
+                    from input in inputs
+                    group input by input.EmployeeId into g
+                    select new EmployeeEventsSummaryResult
+                    {
+                        EmployeeId = g.Key,
+                        NumberOfEvents = g.Sum(x => x.NumberOfEvents)
+                    };
             }
         }
 
@@ -163,41 +168,43 @@ select new {EmployeeId=g.Key, NumberOfEvents = g.Sum(x => x.NumberOfEvents)}"
             public decimal Salary { get; set; }
         }
 
-        public class EmployeeEventsSalaryPerEmployee : AbstractIndexCreationTask
+        public class EmployeeEventsSalaryPerEmployee : AbstractMultiMapIndexCreationTask<EmployeeSalary>
         {
             public override string IndexName => "EmployeeEvents/SalaryPerEmployee";
 
-            public override IndexDefinition CreateIndexDefinition()
+            public EmployeeEventsSalaryPerEmployee()
             {
-                return new IndexDefinition
-                {
-                    Maps =
+                AddMap<EmployeeSalaryRaisedEvent>(events => 
+                    from e in events
+                    where e.MessageType == "EmployeeSalaryRaisedEvent"
+                    select new 
                     {
-                        @"from doc in docs.EmployeeEvents
-where doc.MessageType == ""EmployeeSalaryRaisedEvent""
-select new {
-	doc.EmployeeId,
-	FullName = """",
-	Salary = doc.Amount,
-}",
-                        @"from doc in docs.EmployeeEvents
-where doc.MessageType == ""EmployeeRegisteredEvent""
-select new {
-	doc.EmployeeId,
-	FullName = doc.Name.GivenName + "" "" + doc.Name.Surname,
-	Salary = doc.InitialSalary,
-}"
-                    },
-                    Reduce = @"from result in results
-group result by result.EmployeeId into g
-select new {
-	EmployeeId = g.Key,
-	FullName = g.Aggregate("""", (prev, entry) => entry.FullName != """" ? entry.FullName : prev),
-	Salary = g.Sum(x => x.Salary)
-}"
-                };
-            }
+                        e.EmployeeId,
+                        FullName = "",
+                        Salary = e.Amount
+                    });
 
+                AddMap<EmployeeRegisteredEvent>(events =>
+                    from e in events
+                    where e.MessageType == "EmployeeRegisteredEvent"
+                    select new
+                    {
+                        e.EmployeeId,
+                        FullName = e.Name.GivenName + "  " + e.Name.Surname,
+                        Salary = e.InitialSalary
+                    });
+
+                Reduce = inputs =>
+                    from input in inputs
+                    group input by input.EmployeeId
+                    into g
+                    select new EmployeeSalary()
+                    {
+                        EmployeeId = g.Key,
+                        FullName = g.Aggregate("", (a, b) => b.FullName != "" ? b.FullName : a),
+                        Salary = g.Sum(x => x.Salary)
+                    };
+            }
         }
     }
 }

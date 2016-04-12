@@ -8,9 +8,9 @@ namespace Payroll.Domain.Events
         public Address NewHomeAddress { get; }
 
         public EmployeeHomeAddressUpdatedEvent(
-            EmployeeId id, 
+            EmployeeId employeeId, 
             Address address
-            ) : base(id)
+            ) : base(employeeId)
         {
             NewHomeAddress = address;
         }

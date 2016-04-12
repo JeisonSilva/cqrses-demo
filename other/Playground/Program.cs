@@ -8,6 +8,7 @@ using Payroll.Domain.Model;
 using Payroll.Domain.Repositories;
 using Payroll.Infrastructure;
 using Payroll.Infrastructure.InMemoryBus;
+using Payroll.Infrastructure.RavenDbEmployeeRepository;
 
 
 namespace Playground
@@ -23,6 +24,7 @@ namespace Playground
 
             //SetupInMemoryRepo(container);
             //SetupInMemoryESRepo(container);
+
             SetupRavenDbRegularRepo(container);
             ExecuteSampleCommands(container);
 
@@ -72,6 +74,9 @@ namespace Playground
             container.BindToConstant<IEmployeeRepository>(
                 new Payroll.Infrastructure.RavenDbEmployeeRepository.EmployeeRepository()
                 );
+
+            container.BindToConstant(new EmployeeEventStore());
+            container.Get<IBus>().RegisterHandler<EmployeeEventStore>();
         }
 
         private static void ExecuteSampleCommands(IDependencyInjector container)
@@ -118,7 +123,7 @@ namespace Playground
         {
             var oldColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"ERROR: Failed to register employee {message.Id}");
+            Console.WriteLine($"ERROR: Failed to register employee {message.EmployeeId}");
             Console.ForegroundColor = oldColor;
         }
     }

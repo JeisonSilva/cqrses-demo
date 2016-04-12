@@ -9,10 +9,10 @@ namespace Payroll.Domain.Events
         public decimal InitialSalary { get; private set; }
 
         public EmployeeRegisteredEvent(
-            EmployeeId id,
+            EmployeeId employeeId,
             FullName name, 
             decimal initialSalary
-            ) : base(id)
+            ) : base(employeeId)
         {
             Name = name;
             InitialSalary = initialSalary;

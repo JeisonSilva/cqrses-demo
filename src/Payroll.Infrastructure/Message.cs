@@ -4,11 +4,11 @@ namespace Payroll.Infrastructure
 {
     public abstract class Message
     {
-        public string MessageName { get; private set; }
+        public string MessageType { get; private set; }
 
         protected Message()
         {
-            MessageName = GetType().Name;
+            MessageType = GetType().Name;
         }
     }
 }

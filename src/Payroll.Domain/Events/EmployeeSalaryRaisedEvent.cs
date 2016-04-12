@@ -9,9 +9,9 @@ namespace Payroll.Domain.Events
         public decimal Amount { get; }
 
         public EmployeeSalaryRaisedEvent(
-            EmployeeId id, 
+            EmployeeId employeeId, 
             decimal amount
-            ) : base(id)
+            ) : base(employeeId)
         {
             Amount = amount;
         }

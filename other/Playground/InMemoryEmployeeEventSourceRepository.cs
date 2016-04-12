@@ -20,7 +20,7 @@ namespace Playground
 
         public bool IsRegistered(EmployeeId id)
         {
-            return _events.Any(e => e.Id.Equals(id));
+            return _events.Any(e => e.EmployeeId.Equals(id));
         }
 
         public Employee Load(EmployeeId id)
@@ -28,7 +28,7 @@ namespace Playground
             Console.WriteLine("");
             Console.WriteLine($"Replaying events of employee {id}");
 
-            var employeeEvents = _events.Where(e => e.Id.Equals(id));
+            var employeeEvents = _events.Where(e => e.EmployeeId.Equals(id));
             Employee result = null;
 
             foreach (var e in employeeEvents)
@@ -36,20 +36,20 @@ namespace Playground
                 if (e is EmployeeRegisteredEvent)
                 {
                     var l = e as EmployeeRegisteredEvent;
-                    result = new Employee(l.Id, l.Name, Address.NotInformed, l.InitialSalary);
-                    Console.WriteLine($"{l.MessageName} - {l.Name} (${l.InitialSalary})");
+                    result = new Employee(l.EmployeeId, l.Name, Address.NotInformed, l.InitialSalary);
+                    Console.WriteLine($"{l.MessageType} - {l.Name} (${l.InitialSalary})");
                 }
                 else if (e is EmployeeSalaryRaisedEvent)
                 {
                     var l = e as EmployeeSalaryRaisedEvent;
                     var newSalary = result.Salary + l.Amount;
-                    Console.WriteLine($"{l.MessageName} - ${l.Amount} (from ${result.Salary} to ${newSalary})");
+                    Console.WriteLine($"{l.MessageType} - ${l.Amount} (from ${result.Salary} to ${newSalary})");
                     result = new Employee(result.Id, result.Name, result.HomeAddress, newSalary);
                 }
                 else if (e is EmployeeHomeAddressUpdatedEvent)
                 {
                     var l = e as EmployeeHomeAddressUpdatedEvent;
-                    Console.WriteLine($"{l.MessageName} - from {result.HomeAddress} to {l.NewHomeAddress}");
+                    Console.WriteLine($"{l.MessageType} - from {result.HomeAddress} to {l.NewHomeAddress}");
                     result = new Employee(result.Id, result.Name, l.NewHomeAddress, result.Salary);
                 }
             }

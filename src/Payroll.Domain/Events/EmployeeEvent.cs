@@ -5,11 +5,11 @@ namespace Payroll.Domain.Events
 {
     public abstract class EmployeeEvent : Event
     {
-        public EmployeeId Id { get; private set; }
+        public EmployeeId EmployeeId { get; private set; }
 
-        protected EmployeeEvent(EmployeeId id)
+        protected EmployeeEvent(EmployeeId employeeId)
         {
-            Id = id;
+            EmployeeId = employeeId;
         }
     }
 }

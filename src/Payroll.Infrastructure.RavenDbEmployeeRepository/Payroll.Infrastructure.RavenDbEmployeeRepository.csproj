@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmployeeEventStore.cs" />
     <Compile Include="EmployeeIdConverter.cs" />
     <Compile Include="EmployeeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,6 +62,10 @@
     <ProjectReference Include="..\Payroll.Domain\Payroll.Domain.csproj">
       <Project>{3e052262-9b4f-4881-aad8-47f0437c9ff9}</Project>
       <Name>Payroll.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Payroll.Infrastructure\Payroll.Infrastructure.csproj">
+      <Project>{e21d42e2-aede-4234-b8f1-1b7e84d48c35}</Project>
+      <Name>Payroll.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

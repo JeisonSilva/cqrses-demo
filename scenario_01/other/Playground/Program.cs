@@ -35,9 +35,14 @@ namespace Playground
             Console.WriteLine($"Employee {employee2.Id} - {employee2.Name} salary is ${employee2.Salary}");
 
             var es = container.Get<EmployeeEventStore>();
-            foreach (var entry in es.Summary())
+            foreach (var entry in es.TopEventSourceEmployees())
             {
                 Console.WriteLine($"Number of events to {entry.EmployeeId} is {entry.NumberOfEvents}");
+            }
+
+            foreach (var entry in es.TopSalaries())
+            {
+                Console.WriteLine($"{entry.EmployeeId} -  {entry.FullName} (${entry.Salary})");
             }
         }
 

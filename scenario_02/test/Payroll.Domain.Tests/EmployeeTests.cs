@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
+using Payroll.Domain.Events;
+using Payroll.Domain.Model;
 using SharpTestsEx;
 
 namespace Payroll.Domain.Tests

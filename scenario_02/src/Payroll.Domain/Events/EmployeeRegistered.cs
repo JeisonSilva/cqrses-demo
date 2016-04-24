@@ -1,6 +1,7 @@
 using Infrastructure.EventSourcing;
+using Payroll.Domain.Model;
 
-namespace Payroll.Domain
+namespace Payroll.Domain.Events
 {
     public class EmployeeRegistered : VersionedEvent<string>
     {

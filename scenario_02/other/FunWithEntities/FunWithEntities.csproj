@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FD654EAD-C845-4954-A36D-B1BD021BDE70}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{6DDDD08F-1C99-41F7-BE47-3FD7A18B028C}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Payroll.Domain</RootNamespace>
-    <AssemblyName>Payroll.Domain</AssemblyName>
+    <RootNamespace>FunWithEntities</RootNamespace>
+    <AssemblyName>FunWithEntities</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -40,20 +43,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Address.cs" />
-    <Compile Include="Model\BrazilianAddress.cs" />
-    <Compile Include="Model\Employee.cs" />
-    <Compile Include="Events\EmployeeRegistered.cs" />
-    <Compile Include="Events\EmployeeSalaryRaised.cs" />
-    <Compile Include="FullName.cs" />
-    <Compile Include="Events\EmployeeHomeAddressChanged.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Throw.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Infrastructure.EventSourcing\Infrastructure.EventSourcing.csproj">
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Infrastructure.EventSourcing\Infrastructure.EventSourcing.csproj">
       <Project>{b1acacdb-3555-4a8c-a706-2d4e7d13937f}</Project>
       <Name>Infrastructure.EventSourcing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Payroll.Domain\Payroll.Domain.csproj">
+      <Project>{fd654ead-c845-4954-a36d-b1bd021bde70}</Project>
+      <Name>Payroll.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -6,6 +6,18 @@ namespace Payroll.Domain
     internal static class Throw
     {
         [DebuggerStepThrough]
+        public static T IfArgumentIsNull<T>(
+            T value,
+            string argumentName
+            )
+        {
+            if (value == null)
+                throw new ArgumentNullException(argumentName);
+
+            return value;
+        }
+
+        [DebuggerStepThrough]
         public static string IfArgumentIsNullOrEmpty(
             string value,
             string argumentName

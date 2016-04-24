@@ -20,6 +20,7 @@ namespace Infrastructure.EventSourcing
         public TId Id { get; }
         public int Version { get; protected set; }
 
+        
         public IEnumerable<IVersionedEvent<TId>> PendingEvents
             => _pendingEvents;
 

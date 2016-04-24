@@ -1,4 +1,4 @@
-﻿namespace Payroll.Domain
+﻿namespace Payroll.Domain.Model
 {
     public sealed class FullName
     {

@@ -1,4 +1,5 @@
 ﻿using System;
+using Infrastructure.EventSourcing.RavenDB;
 using Infrastructure.Messaging;
 using Payroll.Domain.CommandHandlers;
 using Payroll.Domain.Commands;
@@ -12,7 +13,7 @@ namespace FunWithEntities
         static void Main(string[] args)
         {
             var bus = new DummyBus();
-            var repository = new InMemoryESEmployeeRepository(bus);
+            var repository = new RavenDBESEmployeeRepository(bus);
             var handler = new EmployeeCommandsHandler(repository);
 
             var employeeId = Guid.NewGuid();

@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunWithEntities", "other\Fu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Messaging", "src\Infrastructure.Messaging\Infrastructure.Messaging.csproj", "{F1BFF1BA-C0DB-4804-8CE9-999A38D3683C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.EventSourcing.RavenDB", "Infrastructure.EventSourcing.RavenDB\Infrastructure.EventSourcing.RavenDB.csproj", "{00EB9D6E-64DE-4A27-B1E3-BDF90ADFD7BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{F1BFF1BA-C0DB-4804-8CE9-999A38D3683C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1BFF1BA-C0DB-4804-8CE9-999A38D3683C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1BFF1BA-C0DB-4804-8CE9-999A38D3683C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00EB9D6E-64DE-4A27-B1E3-BDF90ADFD7BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00EB9D6E-64DE-4A27-B1E3-BDF90ADFD7BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00EB9D6E-64DE-4A27-B1E3-BDF90ADFD7BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00EB9D6E-64DE-4A27-B1E3-BDF90ADFD7BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,5 +61,6 @@ Global
 		{CBE70FC5-D122-44D7-A084-8979D5799BB7} = {EFD0F150-299A-4980-9204-B6E73157A09B}
 		{6DDDD08F-1C99-41F7-BE47-3FD7A18B028C} = {A47EFF8E-0243-46FD-A05B-D0D2FC65F84B}
 		{F1BFF1BA-C0DB-4804-8CE9-999A38D3683C} = {1054516A-5875-4C85-8520-26FDE98A48EB}
+		{00EB9D6E-64DE-4A27-B1E3-BDF90ADFD7BC} = {1054516A-5875-4C85-8520-26FDE98A48EB}
 	EndGlobalSection
 EndGlobal

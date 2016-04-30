@@ -4,6 +4,7 @@ using System.Linq;
 using Infrastructure.Messaging;
 using Payroll.Domain.Model;
 using Payroll.Domain.Repositories;
+using Raven.Abstractions.Commands;
 using Raven.Abstractions.Data;
 using Raven.Client.Converters;
 using Raven.Client.Document;
@@ -42,15 +43,31 @@ namespace Infrastructure.EventSourcing.RavenDB
 
         }
 
-        public bool Exists(Guid id)
+        const string EmployeeEntityVersion =
+            "Employee-Entity-Version";
+
+        public int GetStoredVersionOf(JsonDocumentMetadata head)
         {
-            string localId = $"employees/{id}";
-            return _store.DatabaseCommands.Head(localId) != null;
+            return head
+                ?.Metadata[EmployeeEntityVersion]
+                .Value<int>() ?? 0;
         }
 
+        public JsonDocumentMetadata GetHead(Guid id)
+        {
+            string localId = $"employees/{id}";
+            return _store.DatabaseCommands.Head(localId);
+        }
+        
         public void Save(Employee employee)
         {
-            if (!Exists(employee.Id))
+            var head = GetHead(employee.Id);
+            var storedVersion = GetStoredVersionOf(head);
+
+            if (storedVersion != (employee.Version - employee.PendingEvents.Count()))
+                throw new InvalidOperationException("Invalid object state.");
+
+            if (head == null)
             {
                 SaveNewEmployee(employee);
             }
@@ -58,26 +75,46 @@ namespace Infrastructure.EventSourcing.RavenDB
             {
                 SaveEmployeeEvents(employee);
             }
+
+            foreach (var evt in employee.PendingEvents)
+                Bus.RaiseEvent(evt);
         }
 
-        private void SaveEmployeeEvents(Employee employee)
+        private void SaveEmployeeEvents(
+            Employee employee            )
         {
-            var requests = new List<PatchRequest>();
+            var patches = new List<PatchRequest>();
             foreach (var evt in employee.PendingEvents)
             {
-                requests.Add(new PatchRequest
-                {
+                patches.Add(new PatchRequest
+                { 
                     Type = PatchCommandType.Add,
                     Name = "Events",
                     Value = RavenJObject.FromObject(evt, _serializer)
                 });
-                Bus.RaiseEvent(evt);
             }
+            var localId = $"employees/{employee.Id}";
 
-            _store.DatabaseCommands.Patch(
-                $"employees/{employee.Id}",
-                requests.ToArray()
-                );
+            var addEmployeeEvents = new PatchCommandData()
+            {
+                Key = localId,
+                Patches = patches.ToArray()
+            }; 
+
+            var updateMetada = new ScriptedPatchCommandData()
+            {
+                Key = localId,
+                Patch = new ScriptedPatchRequest
+                {
+                    Script = $"this['@metadata']['{EmployeeEntityVersion}'] = {employee.Version}; "
+                }
+            };
+            
+            _store.DatabaseCommands.Batch(new ICommandData[]
+            {
+                addEmployeeEvents,
+                updateMetada
+            });
         }
 
         private void SaveNewEmployee(Employee employee)
@@ -89,6 +126,10 @@ namespace Infrastructure.EventSourcing.RavenDB
                     employee.PendingEvents
                     );
                 session.Store(document);
+
+                session.Advanced.GetMetadataFor(document)
+                    .Add(EmployeeEntityVersion, employee.Version);
+
                 session.SaveChanges();
             }
         }

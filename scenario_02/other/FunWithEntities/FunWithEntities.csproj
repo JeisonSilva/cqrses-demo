@@ -50,7 +50,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Infrastructure.EventSourcing.RavenDB\Infrastructure.EventSourcing.RavenDB.csproj">
+    <ProjectReference Include="..\..\src\Infrastructure.EventSourcing.RavenDB\Infrastructure.EventSourcing.RavenDB.csproj">
       <Project>{00eb9d6e-64de-4a27-b1e3-bdf90adfd7bc}</Project>
       <Name>Infrastructure.EventSourcing.RavenDB</Name>
     </ProjectReference>

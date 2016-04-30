@@ -59,15 +59,15 @@
     <Compile Include="RavenDBESEmployeeRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\Infrastructure.EventSourcing\Infrastructure.EventSourcing.csproj">
+    <ProjectReference Include="..\Infrastructure.EventSourcing\Infrastructure.EventSourcing.csproj">
       <Project>{b1acacdb-3555-4a8c-a706-2d4e7d13937f}</Project>
       <Name>Infrastructure.EventSourcing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\src\Infrastructure.Messaging\Infrastructure.Messaging.csproj">
+    <ProjectReference Include="..\Infrastructure.Messaging\Infrastructure.Messaging.csproj">
       <Project>{F1BFF1BA-C0DB-4804-8CE9-999A38D3683C}</Project>
       <Name>Infrastructure.Messaging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\src\Payroll.Domain\Payroll.Domain.csproj">
+    <ProjectReference Include="..\Payroll.Domain\Payroll.Domain.csproj">
       <Project>{fd654ead-c845-4954-a36d-b1bd021bde70}</Project>
       <Name>Payroll.Domain</Name>
     </ProjectReference>

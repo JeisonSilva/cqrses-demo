@@ -1,13 +1,14 @@
+using System;
 using Infrastructure.EventSourcing;
 using Payroll.Domain.Model;
 
 namespace Payroll.Domain.Events
 {
-    public class EmployeeHomeAddressChanged : VersionedEvent<string>
+    public class EmployeeHomeAddressChangedEvent : VersionedEvent<Guid>
     {
         public Address NewAddress { get; }
 
-        public EmployeeHomeAddressChanged(Address newAddress)
+        public EmployeeHomeAddressChangedEvent(Address newAddress)
         {
             NewAddress = newAddress;
         }

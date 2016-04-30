@@ -24,7 +24,7 @@ namespace Payroll.Domain.Tests
             var name = new FullName("John", "Doe");
             var employee = new Employee("12345", name, 100M);
             employee.PendingEvents.Count().Should().Be(1);
-            employee.PendingEvents.First().Should().Be.OfType<EmployeeRegistered>();
+            employee.PendingEvents.First().Should().Be.OfType<EmployeeRegisteredEvent>();
         }
     }
 }

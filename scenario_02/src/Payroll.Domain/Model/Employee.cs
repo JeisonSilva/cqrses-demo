@@ -53,7 +53,7 @@ namespace Payroll.Domain.Model
 
         private void OnEmployeeSalaryRaised(EmployeeSalaryRaisedEvent @event)
         {
-            Salary += @event.Amout;
+            Salary += @event.Amount;
         }
 
         private void OnEmployeeHomeAddressChanged(EmployeeHomeAddressChangedEvent @event)

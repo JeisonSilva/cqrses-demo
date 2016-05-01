@@ -5,11 +5,11 @@ namespace Payroll.Domain.Events
 {
     public class EmployeeSalaryRaisedEvent : VersionedEvent<Guid>
     {
-        public decimal Amout { get; }
+        public decimal Amount { get; }
 
         public EmployeeSalaryRaisedEvent(decimal amout)
         {
-            Amout = amout;
+            Amount = amout;
         }
     }
 }

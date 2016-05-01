@@ -20,7 +20,7 @@ namespace FunWithEntities
 
             handler.Handle(new RegisterEmployeeCommand(
                 employeeId,
-                new FullName("John", "Doe"), 
+                new FullName("Mary", "Loo"), 
                 150M
                 ));
 
@@ -34,7 +34,11 @@ namespace FunWithEntities
                 postalCode: "95000-000")
                 )); 
 
-            handler.Handle(new RaiseSalaryCommand(employeeId, 25M));
+            handler.Handle(new RaiseSalaryCommand(employeeId, 80M));
+            handler.Handle(new RaiseSalaryCommand(employeeId, 15M));
+            handler.Handle(new RaiseSalaryCommand(employeeId, 10M));
+            handler.Handle(new RaiseSalaryCommand(employeeId, 5M));
+
 
             var employee = repository.Load(employeeId);
 

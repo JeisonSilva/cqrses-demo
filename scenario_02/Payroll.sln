@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Messaging", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.EventSourcing.RavenDB", "src\Infrastructure.EventSourcing.RavenDB\Infrastructure.EventSourcing.RavenDB.csproj", "{00EB9D6E-64DE-4A27-B1E3-BDF90ADFD7BC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payroll.RavenDB.Plugins", "src\Payroll.RavenDB.Plugins\Payroll.RavenDB.Plugins.csproj", "{A1BB9688-9371-44BD-B8E1-DB205F8650BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{00EB9D6E-64DE-4A27-B1E3-BDF90ADFD7BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00EB9D6E-64DE-4A27-B1E3-BDF90ADFD7BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00EB9D6E-64DE-4A27-B1E3-BDF90ADFD7BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1BB9688-9371-44BD-B8E1-DB205F8650BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1BB9688-9371-44BD-B8E1-DB205F8650BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1BB9688-9371-44BD-B8E1-DB205F8650BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1BB9688-9371-44BD-B8E1-DB205F8650BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,5 +61,6 @@ Global
 		{6DDDD08F-1C99-41F7-BE47-3FD7A18B028C} = {A47EFF8E-0243-46FD-A05B-D0D2FC65F84B}
 		{F1BFF1BA-C0DB-4804-8CE9-999A38D3683C} = {1054516A-5875-4C85-8520-26FDE98A48EB}
 		{00EB9D6E-64DE-4A27-B1E3-BDF90ADFD7BC} = {1054516A-5875-4C85-8520-26FDE98A48EB}
+		{A1BB9688-9371-44BD-B8E1-DB205F8650BA} = {1054516A-5875-4C85-8520-26FDE98A48EB}
 	EndGlobalSection
 EndGlobal

@@ -101,8 +101,7 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
             using (var session = _store.OpenSession())
             {
                 results = session
-                    .Advanced
-                    .DocumentQuery<EmployeeEventsSummaryResult, EmployeeEventsSummaryIndex>()
+                    .Query<EmployeeEventsSummaryResult, EmployeeEventsSummaryIndex>()
                     .OrderByDescending(item => item.NumberOfEvents)
                     .ToList();
             }
@@ -118,8 +117,7 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
             using (var session = _store.OpenSession())
             {
                 results = session
-                    .Advanced
-                    .DocumentQuery<EmployeeSalary, EmployeeEventsSalaryPerEmployee>()
+                    .Query<EmployeeSalary, EmployeeEventsSalaryPerEmployee>()
                     .OrderByDescending(es => es.Salary)
                     .ToList();
             }

@@ -101,7 +101,7 @@ namespace Infrastructure.EventSourcing.RavenDB
                 Patches = patches.ToArray()
             }; 
 
-            var updateMetada = new ScriptedPatchCommandData()
+            var updateMetadata = new ScriptedPatchCommandData()
             {
                 Key = localId,
                 Patch = new ScriptedPatchRequest
@@ -113,7 +113,7 @@ namespace Infrastructure.EventSourcing.RavenDB
             _store.DatabaseCommands.Batch(new ICommandData[]
             {
                 addEmployeeEvents,
-                updateMetada
+                updateMetadata
             });
         }
 

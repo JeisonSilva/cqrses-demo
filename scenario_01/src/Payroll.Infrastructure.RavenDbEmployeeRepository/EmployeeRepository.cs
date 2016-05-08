@@ -43,13 +43,11 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
 
         public Employee Load(EmployeeId id)
         {
-            Employee result;
             using (var session = _store.OpenSession())
             {
-                var lid = $"employees/{id}";
-                result = session.Load<Employee>(lid);
+                return session.Load<Employee>($"employees/{id}");
             }
-            return result;
+            
         }
 
         public void CreateEmployee(EmployeeId id, FullName name, decimal initialSalary)

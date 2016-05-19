@@ -23,10 +23,10 @@ namespace Payroll.Domain.CommandHandlers
         {
             if (!_repository.IsRegistered(message.Id))
             {
-                _logger.Trace($"registering employee {message.Id}");
+                _logger.Trace("CommandHandlers", $"registering employee {message.Id}");
                 _repository.CreateEmployee(message.Id, message.Name, message.InitialSalary);
 
-                _logger.Trace("raising EmployeeRegisteredEvent");
+                _logger.Trace("CommandHandlers", "raising EmployeeRegisteredEvent");
                 _bus.RaiseEvent(
                     new EmployeeRegisteredEvent(
                         message.Id,
@@ -37,8 +37,8 @@ namespace Payroll.Domain.CommandHandlers
             }
             else
             {
-                _logger.Trace($"rejecting to register an existent employee {message.Id}");
-                _logger.Trace("raising FailedToRegisterEmployeeEvent");
+                _logger.Trace("CommandHandlers", $"rejecting to register an existent employee {message.Id}");
+                _logger.Trace("CommandHandlers", "raising FailedToRegisterEmployeeEvent");
                 _bus.RaiseEvent(new FailedToRegisterEmployeeEvent(message.Id));
             }
         }

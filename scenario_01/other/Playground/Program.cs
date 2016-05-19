@@ -40,12 +40,12 @@ namespace Playground
 
             var employee1 = repo.Load("12345");
 
-            _container.Get<ILogger>().Debug(
+            _container.Get<ILogger>().Debug("Playground",
                 $"Employee {employee1.Id} - {employee1.Name} salary is ${employee1.Salary}"
                 );
 
             var employee2 = repo.Load("54321");
-            _container.Get<ILogger>().Debug(
+            _container.Get<ILogger>().Debug("Playground",
                 $"Employee {employee2.Id} - {employee2.Name} salary is ${employee2.Salary}"
                 );
 

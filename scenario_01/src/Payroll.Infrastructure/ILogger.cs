@@ -2,11 +2,11 @@
 {
     public interface ILogger
     {
-        void Trace(string message);
-        void Debug(string message);
-        void Info(string message);
-        void Warn(string message);
-        void Error(string message);
-        void Fatal(string message);
+        void Trace(string logger, string message);
+        void Debug(string logger, string message);
+        void Info(string logger, string message);
+        void Warn(string logger, string message);
+        void Error(string logger, string message);
+        void Fatal(string logger, string message);
     }
 }

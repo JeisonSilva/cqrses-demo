@@ -9,6 +9,13 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
 {
     public class RavenDbEmployeeRepository : IEmployeeRepository
     {
+        private readonly ILogger _logger;
+
+        public RavenDbEmployeeRepository(ILogger logger)
+        {
+            _logger = logger;
+        }
+
         public bool IsRegistered(EmployeeId id)
         {
             var lid = $"employees/{id}";
@@ -19,6 +26,7 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
 
         public Employee Load(EmployeeId id)
         {
+            _logger.Trace("RavenDBRepository", $"Loading employee {id}");
             using (var session = DocumentStoreHolder.Instance.OpenSession())
             {
                 return session.Load<Employee>($"employees/{id}");
@@ -28,6 +36,7 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
 
         public void CreateEmployee(EmployeeId id, FullName name, decimal initialSalary)
         {
+            _logger.Trace("RavenDBRepository", $"Creating a new employee ({id})");
             using (var session = DocumentStoreHolder.Instance.OpenSession())
             {
                 var employee = new Employee(id, name, Address.NotInformed, initialSalary);
@@ -38,6 +47,7 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
 
         public void RaiseSalary(EmployeeId id, decimal amount)
         {
+            _logger.Trace("RavenDBRepository", $"Raising salary ({id})");
             DocumentStoreHolder.Instance.DatabaseCommands.Patch($"employees/{id}", new ScriptedPatchRequest
             {
                 Script = $"this.Salary += {amount.ToInvariantString()};"
@@ -46,6 +56,7 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
 
         public void UpdateHomeAddress(EmployeeId id, Address homeAddress)
         {
+            _logger.Trace("RavenDBRepository", $"Updating address ({id})");
             var ro = RavenJObject.FromObject(homeAddress, DocumentStoreHolder.Serializer);
 
             DocumentStoreHolder.Instance.DatabaseCommands.Patch($"employees/{id}", new[]

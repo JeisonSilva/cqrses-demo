@@ -32,7 +32,7 @@ namespace Payroll.Infrastructure.InMemoryEmployeeRepository
 
         public Employee Load(EmployeeId id)
         {
-            _logger.Trace($"starting to load employee {id}");
+            _logger.Trace("InMemoryRepositoryES", $"starting to load employee {id}");
 
             var employeeEvents = _events.Where(e => e.EmployeeId.Equals(id));
             Employee result = null;
@@ -43,26 +43,26 @@ namespace Payroll.Infrastructure.InMemoryEmployeeRepository
                 {
                     var l = e as EmployeeRegisteredEvent;
                     result = new Employee(l.EmployeeId, l.Name, Address.NotInformed, l.InitialSalary);
-                    _logger.Trace($"replay of {l.MessageType} - {l.Name} (${l.InitialSalary})");
+                    _logger.Trace("InMemoryRepositoryES", $"replay of {l.MessageType} - {l.Name} (${l.InitialSalary})");
                     Console.WriteLine($"{l.MessageType} - {l.Name} (${l.InitialSalary})");
                 }
                 else if (e is EmployeeSalaryRaisedEvent)
                 {
                     var l = e as EmployeeSalaryRaisedEvent;
                     var newSalary = result.Salary + l.Amount;
-                    _logger.Trace($"replay of {l.MessageType} - ${l.Amount} (from ${result.Salary} to ${newSalary})");
+                    _logger.Trace("InMemoryRepositoryES", $"replay of {l.MessageType} - ${l.Amount} (from ${result.Salary} to ${newSalary})");
                     
                     result = new Employee(result.Id, result.Name, result.HomeAddress, newSalary);
                 }
                 else if (e is EmployeeHomeAddressUpdatedEvent)
                 {
                     var l = e as EmployeeHomeAddressUpdatedEvent;
-                    _logger.Trace($"replay of {l.MessageType} - from {result.HomeAddress} to {l.NewHomeAddress}");
+                    _logger.Trace("InMemoryRepositoryES", $"replay of {l.MessageType} - from {result.HomeAddress} to {l.NewHomeAddress}");
                     result = new Employee(result.Id, result.Name, l.NewHomeAddress, result.Salary);
                 }
             }
 
-            _logger.Trace($"employee {id} loaded");
+            _logger.Trace("InMemoryRepositoryES", $"employee {id} loaded");
 
             return result;
         }
@@ -71,35 +71,35 @@ namespace Payroll.Infrastructure.InMemoryEmployeeRepository
 
         public void CreateEmployee(EmployeeId id, FullName name, decimal initialSalary)
         {
-            _logger.Warn($"ignoring create employee transaction script request ${id}");
+            _logger.Warn("InMemoryRepositoryES", $"ignoring create employee transaction script request ${id}");
         }
 
         public void RaiseSalary(EmployeeId id, decimal amount)
         {
-            _logger.Warn($"ignoring raise employee salary transaction script request ${id}");
+            _logger.Warn("InMemoryRepositoryES", $"ignoring raise employee salary transaction script request ${id}");
         }
 
         public void UpdateHomeAddress(EmployeeId id, Address homeAddress)
         {
-            _logger.Warn($"ignoring update employee address transaction script request ${id}");
+            _logger.Warn("InMemoryRepositoryES", $"ignoring update employee address transaction script request ${id}");
         }
         #endregion
 
         public void Handle(EmployeeRegisteredEvent e)
         {
-            _logger.Trace("handling EmployeeRegisteredEvent");
+            _logger.Trace("InMemoryRepositoryES", "handling EmployeeRegisteredEvent");
             _events.Add(e);
         }
 
         public void Handle(EmployeeSalaryRaisedEvent e)
         {
-            _logger.Trace("handling EmployeeSalaryRaisedEvent");
+            _logger.Trace("InMemoryRepositoryES", "handling EmployeeSalaryRaisedEvent");
             _events.Add(e);
         }
 
         public void Handle(EmployeeHomeAddressUpdatedEvent e)
         {
-            _logger.Trace("handling EmployeeHomeAddressUpdatedEvent");
+            _logger.Trace("InMemoryRepositoryES", "handling EmployeeHomeAddressUpdatedEvent");
             _events.Add(e);
         }
     }

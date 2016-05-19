@@ -21,10 +21,10 @@ namespace Payroll.Domain.CommandHandlers
 
         public void Handle(RaiseEmployeeSalaryCommand message)
         {
-            _logger.Trace($"raising salary of {message.Id} in {message.Amount}");
+            _logger.Trace("CommandHandlers", $"raising salary of {message.Id} in {message.Amount}");
             _repository.RaiseSalary(message.Id, message.Amount);
 
-            _logger.Trace("raising EmployeeSalaryEvent");
+            _logger.Trace("CommandHandlers", "raising EmployeeSalaryEvent");
             _bus.RaiseEvent(new EmployeeSalaryRaisedEvent(message.Id, message.Amount));
         }
     }

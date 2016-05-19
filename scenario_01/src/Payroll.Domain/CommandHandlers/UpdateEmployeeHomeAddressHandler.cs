@@ -22,9 +22,9 @@ namespace Payroll.Domain.CommandHandlers
 
         public void Handle(UpdateEmployeeHomeAddressCommand message)
         {
-            _logger.Trace($"updating the address of {message.Id}");
+            _logger.Trace("CommandHandlers", $"updating the address of {message.Id}");
             _repository.UpdateHomeAddress(message.Id, message.HomeAddress);
-            _logger.Trace("raising EmployeeHomeAddressUpdatedEvent");
+            _logger.Trace("CommandHandlers", "raising EmployeeHomeAddressUpdatedEvent");
             _bus.RaiseEvent(new EmployeeHomeAddressUpdatedEvent(
                 message.Id,
                 message.HomeAddress

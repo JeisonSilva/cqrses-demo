@@ -8,13 +8,17 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
         IMessageHandler<EmployeeHomeAddressUpdatedEvent>,
         IMessageHandler<EmployeeSalaryRaisedEvent>
     {
-        public RavenDbEmployeeEventStore()
+        private readonly ILogger _logger;
+
+        public RavenDbEmployeeEventStore(ILogger logger)
         {
+            _logger = logger;
             InitializeIndexes();
         }
 
         private void InitializeIndexes()
         {
+            _logger.Trace("RavenDBEventStore", "initializing indexes");
             new EventsPerEmployeeIndex().Execute(DocumentStoreHolder.Instance);
             new SalaryPerEmployeeIndex().Execute(DocumentStoreHolder.Instance);
         }
@@ -22,6 +26,7 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
 
         public void HandleInternal(Message message)
         {
+            _logger.Trace("RavenDBEventStore", $"handling ${message.MessageType}");
             using (var session = DocumentStoreHolder.Instance.OpenSession())
             {
                 session.Store(message);

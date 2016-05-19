@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DocumentStoreHolder.cs" />
     <Compile Include="RavenDbEmployeeEventStore.cs" />
     <Compile Include="EmployeeEventStore.EventsPerEmployee.cs" />
     <Compile Include="EmployeeEventStore.SalaryPerEmployee.cs" />

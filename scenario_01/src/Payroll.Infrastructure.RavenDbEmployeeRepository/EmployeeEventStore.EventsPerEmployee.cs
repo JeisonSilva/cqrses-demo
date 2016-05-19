@@ -12,7 +12,7 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
         {
             IEnumerable<EventsPerEmployeeResult> results;
 
-            using (var session = _store.OpenSession())
+            using (var session = DocumentStoreHolder.Instance.OpenSession())
             {
                 results = session
                     .Query<EventsPerEmployeeResult, EventsPerEmployeeIndex>()

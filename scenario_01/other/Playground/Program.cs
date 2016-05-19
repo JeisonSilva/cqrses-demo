@@ -17,7 +17,7 @@ namespace Playground
         static void Main()
         {
             
-            new Program(PersistenceStrategy.InMemoryEventSourcing)
+            new Program(PersistenceStrategy.RavenDb)
                 .Run();            
         }
         

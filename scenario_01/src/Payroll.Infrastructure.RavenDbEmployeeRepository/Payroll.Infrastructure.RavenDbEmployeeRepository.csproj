@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EmployeeEventStore.cs" />
+    <Compile Include="EmployeeEventStore.EventsPerEmployee.cs" />
+    <Compile Include="EmployeeEventStore.SalaryPerEmployee.cs" />
     <Compile Include="EmployeeIdConverter.cs" />
     <Compile Include="EmployeeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

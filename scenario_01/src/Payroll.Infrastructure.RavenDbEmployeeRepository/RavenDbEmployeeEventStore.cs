@@ -4,7 +4,7 @@ using Raven.Client.Document;
 
 namespace Payroll.Infrastructure.RavenDbEmployeeRepository
 {
-    public partial class EmployeeEventStore :
+    public partial class RavenDbEmployeeEventStore :
         IMessageHandler<EmployeeRegisteredEvent>,
         IMessageHandler<EmployeeHomeAddressUpdatedEvent>,
         IMessageHandler<EmployeeSalaryRaisedEvent>,
@@ -12,7 +12,7 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
     {
         private readonly DocumentStore _store;
 
-        public EmployeeEventStore()
+        public RavenDbEmployeeEventStore()
         {
             _store = new DocumentStore
             {

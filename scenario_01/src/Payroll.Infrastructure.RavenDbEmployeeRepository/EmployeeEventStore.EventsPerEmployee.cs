@@ -6,7 +6,7 @@ using Raven.Client.Indexes;
 
 namespace Payroll.Infrastructure.RavenDbEmployeeRepository
 {
-    partial class EmployeeEventStore
+    partial class RavenDbEmployeeEventStore
     {
         public IEnumerable<EventsPerEmployeeResult> TopEventSourceEmployees()
         {

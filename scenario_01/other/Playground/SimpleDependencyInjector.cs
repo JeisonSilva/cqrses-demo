@@ -1,7 +1,6 @@
 ﻿using System;
 using Ninject;
 using Payroll.Infrastructure;
-using Payroll.Infrastructure.InMemoryBus;
 
 namespace Playground
 {
@@ -14,7 +13,7 @@ namespace Playground
             _kernel.Bind<IDependencyInjector>().ToConstant(this);
         }
         
-        internal void BindToConstant<T>(T constant)
+        public void BindToConstant<T>(T constant)
         {
             _kernel.Bind<T>().ToConstant(constant);
         }

@@ -50,12 +50,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EmployeeEventStore.cs" />
+    <Compile Include="RavenDbEmployeeEventStore.cs" />
     <Compile Include="EmployeeEventStore.EventsPerEmployee.cs" />
     <Compile Include="EmployeeEventStore.SalaryPerEmployee.cs" />
     <Compile Include="EmployeeIdConverter.cs" />
     <Compile Include="EmployeeIdJsonConverter.cs" />
-    <Compile Include="EmployeeRepository.cs" />
+    <Compile Include="RavenDbEmployeeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

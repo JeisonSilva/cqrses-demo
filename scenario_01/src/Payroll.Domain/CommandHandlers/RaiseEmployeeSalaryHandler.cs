@@ -10,16 +10,21 @@ namespace Payroll.Domain.CommandHandlers
     {
         private readonly IBus _bus;
         private readonly IEmployeeRepository _repository;
+        private readonly ILogger _logger;
 
-        public RaiseEmployeeSalaryHandler(IBus bus, IEmployeeRepository repository)
+        public RaiseEmployeeSalaryHandler(IBus bus, IEmployeeRepository repository, ILogger logger)
         {
             _bus = bus;
             _repository = repository;
+            _logger = logger;
         }
 
         public void Handle(RaiseEmployeeSalaryCommand message)
         {
+            _logger.Trace($"raising salary of {message.Id} in {message.Amount}");
             _repository.RaiseSalary(message.Id, message.Amount);
+
+            _logger.Trace("raising EmployeeSalaryEvent");
             _bus.RaiseEvent(new EmployeeSalaryRaisedEvent(message.Id, message.Amount));
         }
     }

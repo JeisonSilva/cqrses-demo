@@ -10,6 +10,7 @@ namespace Playground
     enum PersistenceStrategy
     {
         InMemory,
+        InMemoryEventSourcing,
         RavenDb    
     }
 
@@ -17,28 +18,44 @@ namespace Playground
     {
         public static void Run(PersistenceStrategy strategy, IDependencyInjector container)
         {
+            container.BindToConstant<ILogger>(new DefaultLogger());
+
+            container.Get<ILogger>().Trace("starting the bootstrapper.");
+
             SetupBus(container);
             SetupDomainCommandHandlers(container);
 
-            if (strategy == PersistenceStrategy.InMemory)
+            switch (strategy)
             {
-                SetupInMemoryRepo(container);
-                SetupInMemoryESRepo(container);
+                case PersistenceStrategy.InMemory:
+                    container.Get<ILogger>().Trace("bootstrapping In-Memory strategy");
+                    SetupInMemoryRepo(container);
+                    break;
+                case PersistenceStrategy.InMemoryEventSourcing:
+                    container.Get<ILogger>().Trace("bootstrapping In-Memory ES strategy");
+                    SetupInMemoryESRepo(container);
+                    break;
+                default:
+                    container.Get<ILogger>().Trace("bootstrapping RavenDb strategy");
+                    SetupRavenDbRepo(container);
+                    break;
             }
-            else
-            {
-                SetupRavenDbRepo(container);   
-            }
+
+            container.Get<ILogger>().Trace("bootstrapped.");
         }
 
-        private static void SetupBus(SimpleDependencyInjector container)
+        private static void SetupBus(IDependencyInjector container)
         {
-            var bus = new NaiveInMemoryBus(container);
+            container.Get<ILogger>().Trace("initializing In-Memory bus.");
+
+            var bus = container.Get<NaiveInMemoryBus>();
             container.BindToConstant<IBus>(bus);
         }
 
         private static void SetupDomainCommandHandlers(IDependencyInjector container)
         {
+            container.Get<ILogger>().Trace("registering command handlers.");
+
             var bus = container.Get<IBus>();
 
             bus.RegisterHandler<RegisterEmployeeHandler>();
@@ -46,24 +63,30 @@ namespace Playground
             bus.RegisterHandler<UpdateEmployeeHomeAddressHandler>();
         }
 
-        private static void SetupInMemoryRepo(SimpleDependencyInjector container)
+        private static void SetupInMemoryRepo(IDependencyInjector container)
         {
+            container.Get<ILogger>().Trace("initialzing In-memory repository");
+
             container.BindToConstant<IEmployeeRepository>(
                 new InMemoryEmployeeRepository()
                 );
 
         }
 
-        private static void SetupInMemoryESRepo(SimpleDependencyInjector container)
+        private static void SetupInMemoryESRepo(IDependencyInjector container)
         {
+            container.Get<ILogger>().Trace("initialzing In-memory event store repo");
+
             var esrepo = new InMemoryEmployeeEventSourceRepository();
             container.BindToConstant<IEmployeeRepository>(esrepo);
             container.BindToConstant(esrepo);
             container.Get<IBus>().RegisterHandler<InMemoryEmployeeEventSourceRepository>();
         }
 
-        private static void SetupRavenDbRepo(SimpleDependencyInjector container)
+        private static void SetupRavenDbRepo(IDependencyInjector container)
         {
+            container.Get<ILogger>().Trace("initialzing RavenDB repositories");
+
             container.BindToConstant<IEmployeeRepository>(
                 new RavenDbEmployeeRepository()
                 );

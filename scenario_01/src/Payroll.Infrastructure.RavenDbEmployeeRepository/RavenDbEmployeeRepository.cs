@@ -11,12 +11,12 @@ using Raven.Json.Linq;
 
 namespace Payroll.Infrastructure.RavenDbEmployeeRepository
 {
-    public class EmployeeRepository : IEmployeeRepository, IDisposable
+    public class RavenDbEmployeeRepository : IEmployeeRepository, IDisposable
     {
         private readonly IDocumentStore _store;
         private readonly JsonSerializer _serializer;
 
-        public EmployeeRepository()
+        public RavenDbEmployeeRepository()
         {
             _store = new DocumentStore
             {

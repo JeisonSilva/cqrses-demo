@@ -7,7 +7,6 @@ using Payroll.Domain.Repositories;
 using Payroll.Infrastructure;
 using Payroll.Infrastructure.RavenDbEmployeeRepository;
 
-
 namespace Playground
 {
     class Program
@@ -32,6 +31,7 @@ namespace Playground
         public void Run()
         {
             ExecuteSampleCommands(_container);
+            DisplaySomeResults();
         }
 
         public void DisplaySomeResults()
@@ -39,9 +39,15 @@ namespace Playground
             var repo = _container.Get<IEmployeeRepository>();
 
             var employee1 = repo.Load("12345");
-            Console.WriteLine($"Employee {employee1.Id} - {employee1.Name} salary is ${employee1.Salary}");
+
+            _container.Get<ILogger>().Debug(
+                $"Employee {employee1.Id} - {employee1.Name} salary is ${employee1.Salary}"
+                );
+
             var employee2 = repo.Load("54321");
-            Console.WriteLine($"Employee {employee2.Id} - {employee2.Name} salary is ${employee2.Salary}");
+            _container.Get<ILogger>().Debug(
+                $"Employee {employee2.Id} - {employee2.Name} salary is ${employee2.Salary}"
+                );
 
 
             if (_strategy != PersistenceStrategy.RavenDb) return;

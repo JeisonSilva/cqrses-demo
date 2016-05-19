@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-
 using Payroll.Domain;
 using Payroll.Domain.Model;
 using Payroll.Domain.Repositories;
 
-namespace Playground             
+namespace Payroll.Infrastructure.InMemoryEmployeeRepository             
 {
-    class InMemoryEmployeeRepository : IEmployeeRepository
+    public class InMemoryEmployeeRepository : IEmployeeRepository
     {
         readonly IDictionary<EmployeeId, Employee> _data = 
             new Dictionary<EmployeeId, Employee>();

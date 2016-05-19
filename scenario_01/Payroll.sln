@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playground", "other\Playgro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payroll.Infrastructure.RavenDbEmployeeRepository", "src\Payroll.Infrastructure.RavenDbEmployeeRepository\Payroll.Infrastructure.RavenDbEmployeeRepository.csproj", "{F9B9B6D3-CA57-483C-80ED-1A6BF9019C21}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payroll.Infrastructure.InMemoryEmployeeRepository", "src\Payroll.Infrastructure.InMemoryEmployeeRepository\Payroll.Infrastructure.InMemoryEmployeeRepository.csproj", "{8B4F6CEC-AA29-48B8-B4DE-07BD06DF6F76}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{F9B9B6D3-CA57-483C-80ED-1A6BF9019C21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9B9B6D3-CA57-483C-80ED-1A6BF9019C21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9B9B6D3-CA57-483C-80ED-1A6BF9019C21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B4F6CEC-AA29-48B8-B4DE-07BD06DF6F76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B4F6CEC-AA29-48B8-B4DE-07BD06DF6F76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B4F6CEC-AA29-48B8-B4DE-07BD06DF6F76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B4F6CEC-AA29-48B8-B4DE-07BD06DF6F76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,5 +61,6 @@ Global
 		{71C4419C-29AD-48A3-92FF-F4E1695D2096} = {16D334AE-B767-44AE-A582-E578A65BC2CA}
 		{0E7B7003-0A5F-4E17-A11E-FEB29EF8448C} = {8ACA2CB5-90CC-4D17-97AE-E3C2FD5DD464}
 		{F9B9B6D3-CA57-483C-80ED-1A6BF9019C21} = {16D334AE-B767-44AE-A582-E578A65BC2CA}
+		{8B4F6CEC-AA29-48B8-B4DE-07BD06DF6F76} = {16D334AE-B767-44AE-A582-E578A65BC2CA}
 	EndGlobalSection
 EndGlobal

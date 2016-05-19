@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0E7B7003-0A5F-4E17-A11E-FEB29EF8448C}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{8B4F6CEC-AA29-48B8-B4DE-07BD06DF6F76}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Playground</RootNamespace>
-    <AssemblyName>Playground</AssemblyName>
+    <RootNamespace>Payroll.Infrastructure.InMemoryEmployeeRepository</RootNamespace>
+    <AssemblyName>Payroll.Infrastructure.InMemoryEmployeeRepository</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,10 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,32 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="InMemoryEmployeeEventSourceRepository.cs" />
+    <Compile Include="InMemoryEmployeeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimpleDependencyInjector.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Payroll.Domain\Payroll.Domain.csproj">
+    <ProjectReference Include="..\Payroll.Domain\Payroll.Domain.csproj">
       <Project>{3e052262-9b4f-4881-aad8-47f0437c9ff9}</Project>
       <Name>Payroll.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Payroll.Infrastructure.InMemoryBus\Payroll.Infrastructure.InMemoryBus.csproj">
-      <Project>{71c4419c-29ad-48a3-92ff-f4e1695d2096}</Project>
-      <Name>Payroll.Infrastructure.InMemoryBus</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Payroll.Infrastructure.InMemoryEmployeeRepository\Payroll.Infrastructure.InMemoryEmployeeRepository.csproj">
-      <Project>{8b4f6cec-aa29-48b8-b4de-07bd06df6f76}</Project>
-      <Name>Payroll.Infrastructure.InMemoryEmployeeRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Payroll.Infrastructure.RavenDbEmployeeRepository\Payroll.Infrastructure.RavenDbEmployeeRepository.csproj">
-      <Project>{f9b9b6d3-ca57-483c-80ed-1a6bf9019c21}</Project>
-      <Name>Payroll.Infrastructure.RavenDbEmployeeRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Payroll.Infrastructure\Payroll.Infrastructure.csproj">
+    <ProjectReference Include="..\Payroll.Infrastructure\Payroll.Infrastructure.csproj">
       <Project>{e21d42e2-aede-4234-b8f1-1b7e84d48c35}</Project>
       <Name>Payroll.Infrastructure</Name>
     </ProjectReference>

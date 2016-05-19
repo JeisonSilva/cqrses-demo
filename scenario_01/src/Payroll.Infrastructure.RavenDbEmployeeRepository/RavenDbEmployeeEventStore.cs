@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Payroll.Domain.Events;
-using Payroll.Domain.Model;
-using Raven.Abstractions.Indexing;
 using Raven.Client.Document;
-using Raven.Client.Indexes;
-using Raven.Imports.Newtonsoft.Json;
 
 namespace Payroll.Infrastructure.RavenDbEmployeeRepository
 {
@@ -22,7 +16,7 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
         {
             _store = new DocumentStore
             {
-                Url = "http://localhost:8080/", // server URL
+                Url = "http://localhost:8080/",
                 DefaultDatabase = "RegularDb",
                 Conventions =
                 {
@@ -32,7 +26,6 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
             };
 
             _store.Conventions.FindTypeTagName = t => "EmployeeEvents";
-
             _store.Initialize();
 
             InitializeIndexes();
@@ -72,27 +65,6 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
         public void Dispose()
         {
             _store.Dispose();
-        }
-
-        private class EmployeeIdJsonConverter : JsonConverter
-        {
-            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-            {
-                serializer.Serialize(writer, $"employees/{value}");
-            }
-
-            public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
-                JsonSerializer serializer)
-            {
-                var original = (string) reader.Value;
-                return (EmployeeId) original.Substring(
-                    original.IndexOf("/", StringComparison.Ordinal) + 1);
-            }
-
-            public override bool CanConvert(Type objectType)
-            {
-                return objectType == typeof (EmployeeId);
-            }
         }
     }
 }

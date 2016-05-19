@@ -8,6 +8,7 @@ using Payroll.Domain.Model;
 using Payroll.Domain.Repositories;
 using Payroll.Infrastructure;
 using Payroll.Infrastructure.InMemoryBus;
+using Payroll.Infrastructure.InMemoryEmployeeRepository;
 using Payroll.Infrastructure.RavenDbEmployeeRepository;
 
 
@@ -60,7 +61,6 @@ namespace Playground
             bus.RegisterHandler<RaiseEmployeeSalaryHandler>();
             bus.RegisterHandler<UpdateEmployeeHomeAddressHandler>();
 
-            bus.RegisterHandler<FailedToRegisterEmployeeHandler>();
 
         }
 

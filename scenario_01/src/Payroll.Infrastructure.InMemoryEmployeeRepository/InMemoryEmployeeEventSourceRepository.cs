@@ -5,11 +5,10 @@ using Payroll.Domain;
 using Payroll.Domain.Events;
 using Payroll.Domain.Model;
 using Payroll.Domain.Repositories;
-using Payroll.Infrastructure;
 
-namespace Playground
+namespace Payroll.Infrastructure.InMemoryEmployeeRepository
 {
-    class InMemoryEmployeeEventSourceRepository 
+    public class InMemoryEmployeeEventSourceRepository 
         : IEmployeeRepository,
         IMessageHandler<EmployeeRegisteredEvent>,
         IMessageHandler<EmployeeSalaryRaisedEvent>,

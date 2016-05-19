@@ -14,7 +14,7 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
     public class EmployeeRepository : IEmployeeRepository, IDisposable
     {
         private readonly IDocumentStore _store;
-        private JsonSerializer _serializer;
+        private readonly JsonSerializer _serializer;
 
         public EmployeeRepository()
         {
@@ -25,7 +25,6 @@ namespace Payroll.Infrastructure.RavenDbEmployeeRepository
             };
 
             _store.Initialize();
-
             _serializer = _store.Conventions.CreateSerializer();
             _serializer.TypeNameHandling = TypeNameHandling.All;
 

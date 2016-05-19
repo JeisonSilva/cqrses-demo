@@ -54,6 +54,7 @@
     <Compile Include="EmployeeEventStore.EventsPerEmployee.cs" />
     <Compile Include="EmployeeEventStore.SalaryPerEmployee.cs" />
     <Compile Include="EmployeeIdConverter.cs" />
+    <Compile Include="EmployeeIdJsonConverter.cs" />
     <Compile Include="EmployeeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

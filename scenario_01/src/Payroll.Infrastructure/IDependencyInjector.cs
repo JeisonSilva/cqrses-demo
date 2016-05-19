@@ -6,5 +6,6 @@ namespace Payroll.Infrastructure
     {
         T Get<T>();
         object Get(Type type);
+        void BindToConstant<T>(T instance);
     }
 }

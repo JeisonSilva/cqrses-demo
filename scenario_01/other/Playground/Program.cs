@@ -1,14 +1,10 @@
 ﻿using System;
 
 using Payroll.Domain;
-using Payroll.Domain.CommandHandlers;
 using Payroll.Domain.Commands;
-using Payroll.Domain.Events;
 using Payroll.Domain.Model;
 using Payroll.Domain.Repositories;
 using Payroll.Infrastructure;
-using Payroll.Infrastructure.InMemoryBus;
-using Payroll.Infrastructure.InMemoryEmployeeRepository;
 using Payroll.Infrastructure.RavenDbEmployeeRepository;
 
 
@@ -16,79 +12,48 @@ namespace Playground
 {
     class Program
     {
+        private readonly PersistenceStrategy _strategy;
+        private readonly IDependencyInjector _container;
+
         static void Main()
         {
-            var container = new SimpleDependencyInjector();
+            
+            new Program(PersistenceStrategy.InMemory)
+                .Run();            
+        }
+        
+        public Program(PersistenceStrategy strategy)
+        {
+            _strategy = strategy;
+            _container = new SimpleDependencyInjector();
+            Boostrapper.Run(strategy, _container);
+        }
 
-            SetupBus(container);
-            SetupDomainCommandHandlers(container);
+        public void Run()
+        {
+            ExecuteSampleCommands(_container);
+        }
 
-            //SetupInMemoryRepo(container);
-            //SetupInMemoryESRepo(container);
+        public void DisplaySomeResults()
+        {
+            var repo = _container.Get<IEmployeeRepository>();
 
-            SetupRavenDbRegularRepo(container);
-            ExecuteSampleCommands(container);
-
-            var employee = container.Get<IEmployeeRepository>().Load("12345");
-            Console.WriteLine($"Employee {employee.Id} - {employee.Name} salary is ${employee.Salary}");
-
-            var employee2 = container.Get<IEmployeeRepository>().Load("54321");
+            var employee1 = repo.Load("12345");
+            Console.WriteLine($"Employee {employee1.Id} - {employee1.Name} salary is ${employee1.Salary}");
+            var employee2 = repo.Load("54321");
             Console.WriteLine($"Employee {employee2.Id} - {employee2.Name} salary is ${employee2.Salary}");
 
-            var es = container.Get<EmployeeEventStore>();
+
+            if (_strategy != PersistenceStrategy.RavenDb) return;
+
+            var es = _container.Get<RavenDbEmployeeEventStore>();
             foreach (var entry in es.TopEventSourceEmployees())
-            {
                 Console.WriteLine($"Number of events to {entry.EmployeeId} is {entry.NumberOfEvents}");
-            }
-
-            foreach (var entry in es.TopSalaries())
-            {
-                Console.WriteLine($"{entry.EmployeeId} -  {entry.FullName} (${entry.Salary})");
-            }
-        }
-
-        private static void SetupBus(SimpleDependencyInjector container)
-        {
-            var bus = new NaiveInMemoryBus(container);
-            container.BindToConstant<IBus>(bus);
-        }
-
-        private static void SetupDomainCommandHandlers(IDependencyInjector container)
-        {
-            var bus = container.Get<IBus>();
-
-            bus.RegisterHandler<RegisterEmployeeHandler>();
-            bus.RegisterHandler<RaiseEmployeeSalaryHandler>();
-            bus.RegisterHandler<UpdateEmployeeHomeAddressHandler>();
-
-
-        }
-
-        private static void SetupInMemoryRepo(SimpleDependencyInjector container)
-        {
-            container.BindToConstant<IEmployeeRepository>(
-                new InMemoryEmployeeRepository()
-                );
-
-        }
-
-        private static void SetupInMemoryESRepo(SimpleDependencyInjector container)
-        {
-            var esrepo = new InMemoryEmployeeEventSourceRepository();
-            container.BindToConstant<IEmployeeRepository>(esrepo);
-            container.BindToConstant(esrepo);
-            container.Get<IBus>().RegisterHandler<InMemoryEmployeeEventSourceRepository>();
-        }
-
-        private static void SetupRavenDbRegularRepo(SimpleDependencyInjector container)
-        {
-            container.BindToConstant<IEmployeeRepository>(
-                new Payroll.Infrastructure.RavenDbEmployeeRepository.EmployeeRepository()
-                );
             
-            container.BindToConstant(new EmployeeEventStore());
-            container.Get<IBus>().RegisterHandler<EmployeeEventStore>();
+            foreach (var entry in es.TopSalaries())
+                Console.WriteLine($"{entry.EmployeeId} -  {entry.FullName} (${entry.Salary})");
         }
+
 
         private static void ExecuteSampleCommands(IDependencyInjector container)
         {
@@ -124,18 +89,6 @@ namespace Playground
 
             bus.SendCommand(new RaiseEmployeeSalaryCommand("12345", 21m));
             bus.SendCommand(new RaiseEmployeeSalaryCommand("12345", 14m));
-        }
-    }
-
-    public class FailedToRegisterEmployeeHandler :
-        IMessageHandler<FailedToRegisterEmployeeEvent>
-    {
-        public void Handle(FailedToRegisterEmployeeEvent message)
-        {
-            var oldColor = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"ERROR: Failed to register employee {message.EmployeeId}");
-            Console.ForegroundColor = oldColor;
         }
     }
 }

@@ -14,8 +14,16 @@ namespace Payroll.Infrastructure.InMemoryEmployeeRepository
         IMessageHandler<EmployeeSalaryRaisedEvent>,
         IMessageHandler<EmployeeHomeAddressUpdatedEvent>
     {
-        
+        private readonly ILogger _logger;
+
         readonly IList<EmployeeEvent> _events = new List<EmployeeEvent>();
+
+        public InMemoryEmployeeEventSourceRepository(
+            ILogger logger
+            )
+        {
+            _logger = logger;
+        }
 
         public bool IsRegistered(EmployeeId id)
         {
@@ -24,8 +32,7 @@ namespace Payroll.Infrastructure.InMemoryEmployeeRepository
 
         public Employee Load(EmployeeId id)
         {
-            Console.WriteLine("");
-            Console.WriteLine($"Replaying events of employee {id}");
+            _logger.Trace($"starting to load employee {id}");
 
             var employeeEvents = _events.Where(e => e.EmployeeId.Equals(id));
             Employee result = null;
@@ -36,52 +43,63 @@ namespace Payroll.Infrastructure.InMemoryEmployeeRepository
                 {
                     var l = e as EmployeeRegisteredEvent;
                     result = new Employee(l.EmployeeId, l.Name, Address.NotInformed, l.InitialSalary);
+                    _logger.Trace($"replay of {l.MessageType} - {l.Name} (${l.InitialSalary})");
                     Console.WriteLine($"{l.MessageType} - {l.Name} (${l.InitialSalary})");
                 }
                 else if (e is EmployeeSalaryRaisedEvent)
                 {
                     var l = e as EmployeeSalaryRaisedEvent;
                     var newSalary = result.Salary + l.Amount;
-                    Console.WriteLine($"{l.MessageType} - ${l.Amount} (from ${result.Salary} to ${newSalary})");
+                    _logger.Trace($"replay of {l.MessageType} - ${l.Amount} (from ${result.Salary} to ${newSalary})");
+                    
                     result = new Employee(result.Id, result.Name, result.HomeAddress, newSalary);
                 }
                 else if (e is EmployeeHomeAddressUpdatedEvent)
                 {
                     var l = e as EmployeeHomeAddressUpdatedEvent;
-                    Console.WriteLine($"{l.MessageType} - from {result.HomeAddress} to {l.NewHomeAddress}");
+                    _logger.Trace($"replay of {l.MessageType} - from {result.HomeAddress} to {l.NewHomeAddress}");
                     result = new Employee(result.Id, result.Name, l.NewHomeAddress, result.Salary);
                 }
             }
 
-            Console.WriteLine("Done!");
-            Console.WriteLine("");
+            _logger.Trace($"employee {id} loaded");
 
             return result;
         }
 
         #region Unused repository methods
+
         public void CreateEmployee(EmployeeId id, FullName name, decimal initialSalary)
-        {}
+        {
+            _logger.Warn($"ignoring create employee transaction script request ${id}");
+        }
 
         public void RaiseSalary(EmployeeId id, decimal amount)
-        {}
+        {
+            _logger.Warn($"ignoring raise employee salary transaction script request ${id}");
+        }
 
         public void UpdateHomeAddress(EmployeeId id, Address homeAddress)
-        {}
+        {
+            _logger.Warn($"ignoring update employee address transaction script request ${id}");
+        }
         #endregion
 
         public void Handle(EmployeeRegisteredEvent e)
         {
+            _logger.Trace("handling EmployeeRegisteredEvent");
             _events.Add(e);
         }
 
         public void Handle(EmployeeSalaryRaisedEvent e)
         {
+            _logger.Trace("handling EmployeeSalaryRaisedEvent");
             _events.Add(e);
         }
 
         public void Handle(EmployeeHomeAddressUpdatedEvent e)
         {
+            _logger.Trace("handling EmployeeHomeAddressUpdatedEvent");
             _events.Add(e);
         }
     }

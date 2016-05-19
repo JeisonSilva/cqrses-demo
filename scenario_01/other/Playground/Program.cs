@@ -17,7 +17,7 @@ namespace Playground
         static void Main()
         {
             
-            new Program(PersistenceStrategy.InMemory)
+            new Program(PersistenceStrategy.InMemoryEventSourcing)
                 .Run();            
         }
         

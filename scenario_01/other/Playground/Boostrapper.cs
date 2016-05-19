@@ -33,7 +33,7 @@ namespace Playground
                     break;
                 case PersistenceStrategy.InMemoryEventSourcing:
                     container.Get<ILogger>().Trace("bootstrapping In-Memory ES strategy");
-                    SetupInMemoryESRepo(container);
+                    SetupInMemoryEsRepo(container);
                     break;
                 default:
                     container.Get<ILogger>().Trace("bootstrapping RavenDb strategy");
@@ -68,16 +68,16 @@ namespace Playground
             container.Get<ILogger>().Trace("initialzing In-memory repository");
 
             container.BindToConstant<IEmployeeRepository>(
-                new InMemoryEmployeeRepository()
+                container.Get<InMemoryEmployeeRepository>()
                 );
 
         }
 
-        private static void SetupInMemoryESRepo(IDependencyInjector container)
+        private static void SetupInMemoryEsRepo(IDependencyInjector container)
         {
             container.Get<ILogger>().Trace("initialzing In-memory event store repo");
 
-            var esrepo = new InMemoryEmployeeEventSourceRepository();
+            var esrepo = container.Get<InMemoryEmployeeEventSourceRepository>();
             container.BindToConstant<IEmployeeRepository>(esrepo);
             container.BindToConstant(esrepo);
             container.Get<IBus>().RegisterHandler<InMemoryEmployeeEventSourceRepository>();

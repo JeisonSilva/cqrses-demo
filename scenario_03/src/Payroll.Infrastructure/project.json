@@ -1,0 +1,11 @@
+﻿{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "MassTransit.RabbitMQ": "3.3.5"
+  },
+
+  "frameworks": {
+    "net46": { }
+  }
+}

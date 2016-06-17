@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AFA69630-295E-48CF-8A2D-E76166126FA4}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Payroll.App", "src\Payroll.App\Payroll.App.xproj", "{79140D19-B084-4E13-9129-82AE7D66CC85}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Payroll.Infrastructure", "src\Payroll.Infrastructure\Payroll.Infrastructure.xproj", "{5B28B6FD-0C52-424A-A254-ADCC846488E1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{79140D19-B084-4E13-9129-82AE7D66CC85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79140D19-B084-4E13-9129-82AE7D66CC85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79140D19-B084-4E13-9129-82AE7D66CC85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79140D19-B084-4E13-9129-82AE7D66CC85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B28B6FD-0C52-424A-A254-ADCC846488E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B28B6FD-0C52-424A-A254-ADCC846488E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B28B6FD-0C52-424A-A254-ADCC846488E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B28B6FD-0C52-424A-A254-ADCC846488E1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{79140D19-B084-4E13-9129-82AE7D66CC85} = {AFA69630-295E-48CF-8A2D-E76166126FA4}
+		{5B28B6FD-0C52-424A-A254-ADCC846488E1} = {AFA69630-295E-48CF-8A2D-E76166126FA4}
+	EndGlobalSection
+EndGlobal
